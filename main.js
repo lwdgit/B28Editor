@@ -1,4 +1,4 @@
-﻿var gridObj, rowObj, savePath, statusText,jsdom = require('./node_b28/node_modules/jsdom');
+﻿var gridObj, rowObj, savePath, statusText;
 var gridData = {
     "success": true,
     "totalRows": 0,
@@ -170,7 +170,7 @@ function initEvent() {
 
             if (!msgid || msgid.trim() === '') return;
             throttle(translateWord, msgid);
-            
+
         }
         rowObj = obj;
     });
@@ -215,11 +215,11 @@ function initEvent() {
         });
     });
 
-   
+
     $('#saveAs').on('change', 'input', function() {
         updateTable();
         var that = this;
-            
+
 
         if (this.value !== '') {
             savePath = this.value;
@@ -290,6 +290,6 @@ $(function() {
         localData: arr,
         pageSize: 0
     });
-    
+
     initEvent();
 });
