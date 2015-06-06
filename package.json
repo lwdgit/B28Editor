@@ -1,13 +1,13 @@
 {
   "name": "B28Editor",
-  "version": "1.0.0",
-  "description": "A sample application to showcase how you can use `\"frame\": false` windows to allow total customization of the window's real state. At beginning, the window is open with no titlebar. As long as you check one of the titlebars, it is added to the appropriate position. Notice that the added titlebars are the only parts of the window that allows dragging. This is achieved through a special CSS property applied to what is draggable or non-draggable (by default, the whole window is not draggable): `-webkit-app-region: drag|no-drag;`",
+  "version": "1.0.1",
+  "description": "Editor for node b28",
   "main": "main.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "liwen",
-  "license": "ISC",
+  "license": "MIT",
   "window": {
     "icon": "res/images/icon.png",
     "show": true,
@@ -21,6 +21,19 @@
     "fullscreen": false
   },
   "webkit": {
-   "plugin": true
+    "plugin": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lwdgit/B28Editor.git"
+  },
+  "dependencies": {
+    "jsdom": ">=3.0.0"
+  },
+  "keywords": [
+    "b28"
+  ],
+  "bugs": {
+    "url": "https://github.com/lwdgit/B28Editor/issues"
   }
 }
