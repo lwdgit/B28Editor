@@ -1,0 +1,253 @@
+﻿<html>
+
+<head>
+
+  <title>B28 多国语编辑器</title>
+
+  <link rel="stylesheet" type="text/css" href="res/css/style.css" />
+  <script>
+  if (window.location.href.indexOf('127') > -1) {
+    window['require'] = function() {
+      return {
+        Window: {
+          get: function() {
+            return {
+              show: function() {}
+            };
+          }
+        }
+      };
+    }
+  }
+  </script>
+  <script src="res/js/titlebar.js"></script>
+  <script src="res/js/frameless_window.js"></script>
+  <link rel="stylesheet" href="res/css/bsgrid.all.min.css" />
+  <script type="text/javascript" src="res/js/jquery-1.11.2.min.js"></script>
+  <script type="text/javascript" src="res/js/grid.zh-CN.min.js"></script>
+  <script type="text/javascript" src="res/js/bsgrid.all.min.js"></script>
+
+  <style>
+  body {
+    padding: 0 5px 67px 5px;
+    border: 1px solid #555;
+    box-shadow: 1px 1px 1px 3px rgba(0,0,0,1);
+  }
+
+  .toolbar {
+    padding-top: 32px;
+    border-bottom: 1px solid #777;
+    height: 40px;
+  }
+
+  .toolbar > *{
+    float: left;
+  }
+
+  .flex-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .left {
+    height: 100%;
+    width: auto;
+    flex: 1 0 150px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .right {
+    height: 100%;
+    width: 250px;
+    background: #ddd;
+    border: 1px solid #777;
+  }
+
+  .list {
+    flex: 1 0 80px;
+    width: 100%;
+    overflow-y: scroll;
+    position: relative;
+  }
+
+  .menu_context {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    top: 0;
+    left: 0;
+    z-index: 5000;
+    -webkit-user-select: none;
+  }
+  .menu_context ul {
+    display: inline-block;
+    background: #fdfdfd;
+    border: 1px solid #eee;
+    padding: 0;
+    cursor: pointer;
+    position: fixed;
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  }
+  .menu_context ul li {
+    list-style: none;
+    padding: 3px 14px;
+  }
+  .menu_context ul li:hover {
+    background: #733;
+    color: #ddd;
+  }
+  .menu_context ul li + li {
+    border-top: 1px dotted #dfdfdf;
+  }
+
+
+  .editContainer {
+    height: 277px;
+    width: 100%;
+    border-top: 1px solid #777;
+  }
+
+  .bsgridPagingOutTab {
+    display: none !important;
+  }
+
+  textarea {
+    width: 100%;
+    height: 115px;
+    resize: none;
+  }
+
+  .statusbar {
+    width: 100%;
+    height: 30px;
+  }
+
+  .helper-panel > * {
+    width: 91%;
+    border-top: 1px dotted #999;
+    padding: 10px;
+  }
+  .translate-tool {
+    border: none;
+    background: #499;
+    display: block;
+    color: #fee;
+  }
+
+  .optWord {
+    display: block;
+    cursor: pointer;
+  }
+
+  .optWord:hover {
+    background: #aaa;
+  }
+
+  .btn {
+    border: 1px solid #999;
+    position: relative;
+    text-decoration: none;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #FFFFFF), color-stop(1, #DADADA));
+    box-shadow: 1px 2px 2px 0px rgba(0,0,0,0.1);
+    font-size: 0.9em;
+    display: inline;
+    text-align: center;
+    padding: 6px 15px;
+    margin: 3px 0px;
+    -webkit-user-select: none;
+    cursor: pointer;
+  }
+
+  .btn:first-child {
+    margin-left: 0;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+  }
+
+  .btn:active {
+    box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #EDEDED), color-stop(1, #FFFFFF));
+  }
+  
+  .btn + .btn {
+    border-left: none;
+  }
+
+  .btn:last-child {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+
+  .btn input {
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    position: absolute;
+  }
+
+  .none {
+    display: none;
+  }
+
+  </style>
+</head>
+
+<body>
+  <div class="toolbar">
+    <label for="openFile" class="btn" id="openFile">打开<input type="file" name="file"  accept='.json' multiple="multiple"></label>
+    <label class="btn none" id="openDir">扫描<input type="file" name="dir" nwdirectory nwworkingdir="C:"></label>
+    <label class="btn none" id="saveFile">保存</label>
+    <label class="btn" id="saveAs">保存<input type="file" name="saveFile" nwsaveas="lang.json" accept=".json"></label>
+  </div>
+  <div class="flex-container">
+    <div class="left">
+      <div class="list">
+        <table id="dataTable">
+          <tr>
+            <th w_index="msgid" width="50%">源语言</th>
+            <th w_index="msgstr" width="50%">翻译</th>
+          </tr>
+        </table>
+      </div>
+      <div class="editContainer">
+        <form action="">
+          源语言:
+          <textarea id="msgid" cols="30" rows="10"></textarea>
+          翻译:
+          <textarea id="msgstr" cols="30" rows="10"></textarea>
+        </form>
+      </div>
+      <div class="statusbar">请先打开或扫描以获得待翻译语言包</div>
+    </div>
+    <div class="right">
+      <div class="helper-panel">
+        <div class="title">翻译建议:</div>
+        <div class="translate">
+          <label class="translate-tool">百度</label>
+          <div id="baiduTranslate"></div>
+          <label class="translate-tool">有道</label>
+          <div id="youdaoTranslate"></div>
+          <label class="translate-tool">谷歌</label>
+          <div id="googleTranslate"></div>
+        </div>
+        <div class="text-align:center"><label id="undo" class="btn none">撤销</label></div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="res/js/context_menu.js"></script>
+  <script type="text/javascript" src="main.js"></script>
+</body>
+</html>
